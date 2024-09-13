@@ -13,8 +13,15 @@ namespace Avalonia.SpellChecker;
 public class SpellCheckerTextPresenter : TextPresenter
 {
 
-    private readonly SpellCheckService spellCheckService = new SpellCheckService(@"en_GB.dic");
+    private SpellChecker spellChecker;
     private List<SpellCheckResult> spellCheckResults = null;
+
+    public SpellChecker SpellChecker
+    {
+        get { return this.spellChecker; }
+        set { this.spellChecker = value; }
+    }
+
     protected override TextLayout CreateTextLayout()
     {
         TextLayout result;
@@ -62,7 +69,7 @@ public class SpellCheckerTextPresenter : TextPresenter
 
         bool styled = false;
 
-        if (Text?.Length > 10)
+        if (Text?.Length > 1)
         {
 
             var fontFeatures = new FontFeatureCollection();
@@ -90,7 +97,7 @@ public class SpellCheckerTextPresenter : TextPresenter
             //});
 
             //var words = SpellCheckService.SeparateWords(Text);
-            spellCheckResults = spellCheckService.CheckSpellingFullText(Text);
+            spellCheckResults = spellChecker.CheckSpellingFullText(Text);
             List<ValueSpan<TextRunProperties>> overrides = new List<ValueSpan<TextRunProperties>>();
 
             var underlineProp = new GenericTextRunProperties(
@@ -145,17 +152,19 @@ public class SpellCheckerTextPresenter : TextPresenter
 
         return result;
     }
-    public IEnumerable<string> GetSuggestionsAt(Point point)
+    public IEnumerable<string>? GetSuggestionsAt(Point point)
     {
 
         if (spellCheckResults == null)
         {
-            return Enumerable.Empty<string>();
+            return null;
         }
 
         var result = TextLayout.HitTestPoint(point);
 
-        return spellCheckResults.Where(x => x.Start <= result.TextPosition && x.Start + x.Length >= result.TextPosition).Select(x => spellCheckService.GetSuggestions(x.Word)).FirstOrDefault();
+        return spellCheckResults
+            .Where(x => x.Start <= result.TextPosition && (x.Start + x.Length) >= result.TextPosition)
+            .Select(x => spellChecker.GetSuggestions(x.Word)).FirstOrDefault();
     }
 
     private static string? GetCombinedText(string? text, int caretIndex, string? preeditText)
@@ -200,5 +209,10 @@ public class SpellCheckerTextPresenter : TextPresenter
             flowDirection: FlowDirection, lineHeight: LineHeight, letterSpacing: LetterSpacing);
 
         return textLayout;
+    }
+
+    internal void SetSpellCheckerConfig(SpellCheckerConfig config)
+    {
+        throw new NotImplementedException();
     }
 }

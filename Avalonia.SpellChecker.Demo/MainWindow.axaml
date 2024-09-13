@@ -2,55 +2,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
         xmlns:local="clr-namespace:Avalonia.SpellChecker.Demo"
         x:Class="Avalonia.SpellChecker.Demo.MainWindow"
         Title="Avalonia Spell Checker Demo">
-	<Window.Styles>
-		<!--<StyleInclude Source="avares://Avalonia.SpellChecker/Styles/SpellCheckerStyles.axaml"/>-->
-
-
-		<!--xmlns:spellStyles="clr-namespace:Avalonia.SpellChecker;assembly=Avalonia.SpellChecker"
--->
-		<!--<Style Selector="TextBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          HorizontalScrollBarVisibility="Hidden"
-                                          VerticalScrollBarVisibility="Hidden">
-                                -->
-		<!-- Use the Custom TextPresenter from the local namespace -->
-		<!--
-								<spellchecker:SpellCheckerTextPresenter x:Name="PART_TextPresenter"
-                                                           TextWrapping="{TemplateBinding TextWrapping}"
-                                                           Margin="{TemplateBinding Padding}"
-                                                           VerticalAlignment="Center"
-                                                           HorizontalAlignment="Left"
-                                                           Text="{TemplateBinding Text}"
-                                                           CaretIndex="{TemplateBinding CaretIndex}"
-                                                           TextAlignment="{TemplateBinding TextAlignment}" />
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>-->
-	</Window.Styles>
-
 	<StackPanel Margin="20">
 		<TextBlock Margin="0 5" >Name:</TextBlock>
-		<TextBox x:Name="tbUserName" Watermark="Enter your name"  >
-			<TextBox.ContextMenu>
-				<StaticResource ResourceKey="DefaultTextBoxContextMenu"/>
-			</TextBox.ContextMenu>
-		</TextBox>
+		<TextBox x:Name="tbUserName" Watermark="Enter your name"/> 
 
 		<TextBlock Margin="0 15 0 5">Notes:</TextBlock>
-		<TextBox x:Name="tbNotes" Height="100" AcceptsReturn="True" TextWrapping="Wrap" >
-		</TextBox>
+		<TextBox x:Name="tbNotes" Height="100" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top" />
 	</StackPanel>
 </Window>

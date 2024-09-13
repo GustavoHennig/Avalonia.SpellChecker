@@ -1,15 +1,21 @@
 ﻿using System.Text.RegularExpressions;
-using WeCantSpell.Hunspell;
 
 namespace Avalonia.SpellChecker
 {
-    public class SpellCheckService
+    public class SpellChecker
     {
-        private readonly WordList _wordList;
+        //private readonly WordList _wordList;
 
-        public SpellCheckService(string dictionaryPath)
+
+        /// <summary>
+        /// Keeps track of the dictionaries and custom words
+        /// </summary>
+        private static DictionaryManager dictionaryManager;
+
+        public SpellChecker(SpellCheckerConfig spellCheckerConfig)
         {
-            _wordList = WordList.CreateFromFiles(dictionaryPath);
+            //_wordList = WordList.CreateFromFiles(dictionaryPath);
+            dictionaryManager ??= new DictionaryManager(spellCheckerConfig);
         }
 
 
@@ -28,7 +34,7 @@ namespace Avalonia.SpellChecker
 
             foreach (var word in words)
             {
-                if (!_wordList.Check(word.Value))
+                if (!dictionaryManager.CheckWord(word.Value))
                 {
                     //var suggestions = _wordList.Suggest(word.Value);
                     results.Add(new SpellCheckResult
@@ -52,7 +58,7 @@ namespace Avalonia.SpellChecker
                 return Enumerable.Empty<string>();
             }
 
-            return _wordList.Suggest(word);
+            return dictionaryManager.Suggest(word);
 
         }
 

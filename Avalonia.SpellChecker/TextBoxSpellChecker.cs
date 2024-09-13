@@ -11,10 +11,27 @@ namespace Avalonia.SpellChecker
     public class TextBoxSpellChecker
     {
         private readonly HashSet<TextBox> controls = new HashSet<TextBox>();
+        private readonly SpellCheckerConfig config;
 
-
-        public void Initialize(TextBox textBox, SpellCheckerConfig config)
+        public TextBoxSpellChecker(SpellCheckerConfig config)
         {
+            this.config = config;
+        }
+
+        public void Initialize(TextBox textBox)
+        {
+
+            if (config is null)
+            {
+                return;
+            }
+
+
+            if (config.EnabledLanguages is null || config.EnabledLanguages.Count == 0)
+            {
+                return;
+            }
+
             controls.Add(textBox);
 
             // Create a new StyleInclude instance
@@ -27,10 +44,31 @@ namespace Avalonia.SpellChecker
             textBox.Styles.Add(styleInclude);
 
 
+            // Initialize the SpellCheckerTextPresenter setting
+            textBox.TemplateApplied += OnTemplateApplied;
+
+
             // Clean up
             textBox.DetachedFromLogicalTree += OnTextBoxDisposed;
 
             textBox.AddHandler(Control.ContextRequestedEvent, TextBox_ContextRequested, handledEventsToo: true);
+        }
+
+        private void OnTemplateApplied(object? sender, Controls.Primitives.TemplateAppliedEventArgs e)
+        {
+            var textPresenter = e.NameScope.Find<SpellCheckerTextPresenter>("PART_TextPresenter");
+
+            if (textPresenter is null)
+            {
+                return;
+            }
+
+            textPresenter.SpellChecker = new SpellChecker(config);
+
+            if (sender is TextBox textBox)
+            {
+                textBox.TemplateApplied -= OnTemplateApplied;
+            }
         }
 
 
