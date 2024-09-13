@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35201.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.SpellChecker.Demo", "Avalonia.SpellChecker.Demo\Avalonia.SpellChecker.Demo.csproj", "{B212AFB2-0B0F-49D2-9236-AC9A8BBF75B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.SpellChecker", "Avalonia.SpellChecker\Avalonia.SpellChecker.csproj", "{778FFA5B-A571-44E9-A25E-56C4D6B618E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5DD966E6-457D-49E2-9632-C29D3E6ACB09}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B212AFB2-0B0F-49D2-9236-AC9A8BBF75B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B212AFB2-0B0F-49D2-9236-AC9A8BBF75B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B212AFB2-0B0F-49D2-9236-AC9A8BBF75B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B212AFB2-0B0F-49D2-9236-AC9A8BBF75B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778FFA5B-A571-44E9-A25E-56C4D6B618E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778FFA5B-A571-44E9-A25E-56C4D6B618E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778FFA5B-A571-44E9-A25E-56C4D6B618E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778FFA5B-A571-44E9-A25E-56C4D6B618E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA975636-EBED-409F-814A-C15699B07A49}
+	EndGlobalSection
+EndGlobal

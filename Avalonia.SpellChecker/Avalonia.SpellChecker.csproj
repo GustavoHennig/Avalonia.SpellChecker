@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AvaloniaXaml Remove="SpellCheckerResourceDictionary.axaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Dictionaries\es_MX.aff" />
+		<None Remove="Dictionaries\es_MX.dic" />
+		<None Remove="Dictionaries\pt_BR.aff" />
+		<None Remove="Dictionaries\pt_BR.dic" />
+		<None Remove="Dictionaries\en_GB.aff" />
+		<None Remove="Dictionaries\en_GB.dic" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Dictionaries\en_GB.aff">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Dictionaries\en_GB.dic">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Dictionaries\es_MX.aff">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Dictionaries\es_MX.dic">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Dictionaries\pt_BR.aff">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Dictionaries\pt_BR.dic">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="WeCantSpell.Hunspell" Version="5.0.0" />
+		<PackageReference Include="Avalonia" Version="11.1.3" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Avalonia.SpellChecker">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<TextBox Text="Enter your name" />
+		</Border>
+	</Design.PreviewWith>
+
+	<Style Selector="TextBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility="Hidden">
+                            <local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
+                                                                TextWrapping="{TemplateBinding TextWrapping}"
+                                                                Margin="{TemplateBinding Padding}"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Left"
+                                                                Text="{TemplateBinding Text}"
+                                                                CaretIndex="{TemplateBinding CaretIndex}"
+                                                                TextAlignment="{TemplateBinding TextAlignment}" />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</Styles>
