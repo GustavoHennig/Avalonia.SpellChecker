@@ -16,7 +16,7 @@ public partial class MainWindow : Window
         var textBox = this.FindControl<TextBox>("tbUserName");
 
 
-        extendTextBox = new TextBoxSpellChecker(SpellCheckerConfig.Create("pt_BR"));
+        extendTextBox = new TextBoxSpellChecker(SpellCheckerConfig.Create("pt_BR", "en_GB"));
         extendTextBox.Initialize(textBox);
         extendTextBox.Initialize(this.FindControl<TextBox>("tbNotes"));
 

@@ -22,6 +22,22 @@ public class SpellCheckerTextPresenter : TextPresenter
         set { this.spellChecker = value; }
     }
 
+    public TextDecoration MisspelledWordDecoration { get; set; }
+
+    public SpellCheckerTextPresenter()
+    {
+        // Default red dotted underline
+        MisspelledWordDecoration = new TextDecoration()
+        {
+            Location = TextDecorationLocation.Underline,
+            Stroke = Brushes.OrangeRed,
+            StrokeDashArray = new AvaloniaList<double>(new[] { 1, 2.0 }),
+            StrokeLineCap = PenLineCap.Round,
+            StrokeThickness = 22.5
+        };
+
+    }
+
     protected override TextLayout CreateTextLayout()
     {
         TextLayout result;
@@ -34,10 +50,17 @@ public class SpellCheckerTextPresenter : TextPresenter
         var selectionEnd = SelectionEnd;
         var start = Math.Min(selectionStart, selectionEnd);
         var length = Math.Max(selectionStart, selectionEnd) - start;
-
-        IReadOnlyList<ValueSpan<TextRunProperties>>? textStyleOverrides = null;
-
         var foreground = Foreground;
+
+        // Create default TextRunProperties without any text decorations
+        var defaultTextRunProperties = new GenericTextRunProperties(
+            typeface,
+            FontFeatures,
+            FontSize,
+            textDecorations: null, // No decorations by default
+            foregroundBrush: foreground);
+
+        List<ValueSpan<TextRunProperties>> overrides = new List<ValueSpan<TextRunProperties>>();
 
         if (!string.IsNullOrEmpty(preeditText))
         {
@@ -46,88 +69,68 @@ public class SpellCheckerTextPresenter : TextPresenter
                     foregroundBrush: foreground,
                     textDecorations: TextDecorations.Underline));
 
-            textStyleOverrides = new[]
-            {
-                    preeditHighlight
-                };
+            overrides.Add(preeditHighlight);
         }
         else
         {
             if (length > 0 && SelectionForegroundBrush != null)
             {
-                textStyleOverrides = new[]
-                {
+                overrides.Add(
                         new ValueSpan<TextRunProperties>(
                                start,
                                length,
                                 new GenericTextRunProperties(
                                     typeface, FontFeatures, FontSize,
                                     foregroundBrush: SelectionForegroundBrush))
-                    };
+                    );
             }
         }
-
-        bool styled = false;
 
         if (Text?.Length > 1)
         {
+            var misspellesWordTextDecorations = new TextDecorationCollection();
+            misspellesWordTextDecorations.Add(MisspelledWordDecoration);
 
-            var fontFeatures = new FontFeatureCollection();
-            //fontFeatures.Add(new FontFeature(){  "smcp", 1));
-            var tf = new Typeface(FontFamily, FontStyle.Italic, FontWeight, FontStretch);
-
-            var dec = new TextDecorationCollection();
-            dec.Add(new TextDecoration()
-            {
-                Location = TextDecorationLocation.Underline,
-                Stroke = Brushes.OrangeRed,
-                StrokeDashArray = new AvaloniaList<double>(new[] { 1, 2.0 }),
-                StrokeLineCap = PenLineCap.Round,
-
-                StrokeThickness = 22.5
-            });
-            //dec.Add(new TextDecoration()
-            //{
-            //    Location = TextDecorationLocation.Underline,
-            //    Stroke = Brushes.Green,
-            //  //  StrokeDashArray = new AvaloniaList<double>(new[] { 2, 2.0 }),
-            //     StrokeLineCap = PenLineCap.Round,
-
-            //    StrokeThickness = 31
-            //});
-
-            //var words = SpellCheckService.SeparateWords(Text);
             spellCheckResults = spellChecker.CheckSpellingFullText(Text);
-            List<ValueSpan<TextRunProperties>> overrides = new List<ValueSpan<TextRunProperties>>();
 
             var underlineProp = new GenericTextRunProperties(
-                                    typeface, FontFeatures, FontSize,
+                                    typeface,
+                                    FontFeatures,
+                                    FontSize,
+                                    textDecorations: misspellesWordTextDecorations,
+                                    foregroundBrush: foreground);
 
-                                    textDecorations: dec,
-                                    foregroundBrush: this.Foreground);
+            int currentPosition = 0;
+
 
             foreach (var word in spellCheckResults)
             {
+                // If there is a gap between currentPosition and the start of the misspelled word
+                if (word.Start > currentPosition)
+                {
+                    // Add a ValueSpan with the default decoration for the gap
+                    overrides.Add(new ValueSpan<TextRunProperties>(currentPosition, word.Start - currentPosition, defaultTextRunProperties));
+                }
+
                 overrides.Add(new ValueSpan<TextRunProperties>(word.Start, word.Length, underlineProp));
+
+                currentPosition = word.Start + word.Length;
             }
 
-            textStyleOverrides = overrides.ToArray();
-
-
-            styled = true;
-        }
-
-        if (styled)
-        {
-            result = CreateTextLayoutInternal(this.DesiredSize, Text, typeface, textStyleOverrides);
+            // If there is any text left after the last misspelled word, add a default decoration
+            if (currentPosition < Text.Length)
+            {
+                overrides.Add(new ValueSpan<TextRunProperties>(currentPosition, Text.Length - currentPosition, defaultTextRunProperties));
+            }
 
         }
-        else
+
+        // Convert the overrides to an array for the TextLayout
+        var textStyleOverrides = overrides.ToArray();
 
         if (PasswordChar != default(char) && !RevealPassword)
         {
-            result = CreateTextLayoutInternal(this.DesiredSize, new string(PasswordChar, text?.Length ?? 0), typeface,
-        textStyleOverrides);
+            result = CreateTextLayoutInternal(this.DesiredSize, new string(PasswordChar, text?.Length ?? 0), typeface, textStyleOverrides);
         }
         else
         {
@@ -196,8 +199,4 @@ public class SpellCheckerTextPresenter : TextPresenter
         return textLayout;
     }
 
-    internal void SetSpellCheckerConfig(SpellCheckerConfig config)
-    {
-        throw new NotImplementedException();
-    }
 }

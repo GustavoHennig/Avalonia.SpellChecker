@@ -8,9 +8,16 @@
         Title="Avalonia Spell Checker Demo">
 	<StackPanel Margin="20">
 		<TextBlock Margin="0 5" >Name:</TextBlock>
-		<TextBox x:Name="tbUserName" Watermark="Enter your name"/> 
+		<TextBox x:Name="tbUserName" Watermark="Enter your name" Cursor="Arrow"/>
+
+		<TextBlock Margin="0 5" >Name 2:</TextBlock>
+		<TextBox x:Name="tbUserName2" Watermark="Enter your name" Cursor="Arrow"/>
 
 		<TextBlock Margin="0 15 0 5">Notes:</TextBlock>
-		<TextBox x:Name="tbNotes" Height="100" AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Top" />
+		<TextBox x:Name="tbNotes" Height="100" 
+				 TextWrapping="Wrap" VerticalAlignment="Top" />
+
+		<TextBlock Margin="0 15 0 5">Notes without spell checking:</TextBlock>
+		<TextBox x:Name="tbNotes2" Height="100" TextWrapping="Wrap" VerticalAlignment="Top" />
 	</StackPanel>
 </Window>
