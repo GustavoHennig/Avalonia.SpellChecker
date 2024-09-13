@@ -8,27 +8,28 @@
 	</Design.PreviewWith>
 
 	<Style Selector="TextBox">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border Background="{TemplateBinding Background}"
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <ScrollViewer x:Name="PART_ContentHost"
+						<ScrollViewer x:Name="PART_ContentHost"
                                       HorizontalScrollBarVisibility="Hidden"
                                       VerticalScrollBarVisibility="Hidden">
-                            <local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
+							<local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
                                                                 TextWrapping="{TemplateBinding TextWrapping}"
                                                                 Margin="{TemplateBinding Padding}"
-                                                                VerticalAlignment="Center"
-                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                                                 Text="{TemplateBinding Text}"
                                                                 CaretIndex="{TemplateBinding CaretIndex}"
-                                                                TextAlignment="{TemplateBinding TextAlignment}" />
-                        </ScrollViewer>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+                                                                TextAlignment="{TemplateBinding TextAlignment}"
+																 />
+						</ScrollViewer>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 </Styles>
