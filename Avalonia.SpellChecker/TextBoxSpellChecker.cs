@@ -128,7 +128,7 @@ namespace Avalonia.SpellChecker
 
             foreach (var suggestion in suggestions)
             {
-                transientMenuFalyout.Items.Add(new MenuItem { Header = suggestion, Command = new CustomCommand(SuggestionSelected) });
+                transientMenuFalyout.Items.Add(new MenuItem { Header = suggestion.WordSuggested, Command = new AcceptSuggestionCommand(SuggestionSelected, textBox, suggestion) });
 
             }
 
@@ -160,21 +160,28 @@ namespace Avalonia.SpellChecker
             e.Handled = true;
         }
 
-        private void SuggestionSelected()
+        private void SuggestionSelected(TextBox textBox, SpellCheckSuggestion suggestion)
         {
             // TODO: Receive TextBox, Suggestion position and replace the word
+            textBox.Text = textBox.Text
+                .Remove(suggestion.OriginalWordPosition, suggestion.OriginalWordLength)
+                .Insert(suggestion.OriginalWordPosition, suggestion.WordSuggested);
         }
 
 
     }
     // Custom ICommand implementation
-    public class CustomCommand : ICommand
+    public class AcceptSuggestionCommand : ICommand
     {
-        private readonly Action _execute;
+        private readonly Action<TextBox, SpellCheckSuggestion> execute;
+        private readonly TextBox textBox;
+        private readonly SpellCheckSuggestion suggestion;
 
-        public CustomCommand(Action execute)
+        public AcceptSuggestionCommand(Action<TextBox, SpellCheckSuggestion> execute, TextBox textBox, SpellCheckSuggestion suggestion)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.textBox = textBox;
+            this.suggestion = suggestion;
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -186,7 +193,7 @@ namespace Avalonia.SpellChecker
 
         public void Execute(object? parameter)
         {
-            _execute();
+            execute(this.textBox, this.suggestion);
         }
     }
 }

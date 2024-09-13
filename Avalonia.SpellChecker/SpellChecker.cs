@@ -20,9 +20,9 @@ namespace Avalonia.SpellChecker
 
 
 
-        public List<SpellCheckResult> CheckSpellingFullText(string inputText)
+        public List<SpellCheckEntry> CheckSpellingFullText(string inputText)
         {
-            var results = new List<SpellCheckResult>();
+            var results = new List<SpellCheckEntry>();
 
             if (string.IsNullOrWhiteSpace(inputText))
             {
@@ -37,7 +37,7 @@ namespace Avalonia.SpellChecker
                 if (!dictionaryManager.CheckWord(word.Value))
                 {
                     //var suggestions = _wordList.Suggest(word.Value);
-                    results.Add(new SpellCheckResult
+                    results.Add(new SpellCheckEntry
                     {
                         Start = word.Index,
                         Length = word.Length,
@@ -50,16 +50,21 @@ namespace Avalonia.SpellChecker
             return results;
         }
 
-        public IEnumerable<string> GetSuggestions(string word)
+        public IEnumerable<SpellCheckSuggestion> GetSuggestions(string word, int originalWordPosition, int wordLength)
         {
-
             if (string.IsNullOrWhiteSpace(word))
             {
-                return Enumerable.Empty<string>();
+                return Enumerable.Empty<SpellCheckSuggestion>();
             }
 
-            return dictionaryManager.Suggest(word);
-
+            return dictionaryManager
+                .Suggest(word)
+                .Select(s => new SpellCheckSuggestion
+                {
+                    WordSuggested = s,
+                    OriginalWordPosition = originalWordPosition,
+                    OriginalWordLength = wordLength
+                });
         }
 
         public static IEnumerable<Match> SeparateWords(string text)

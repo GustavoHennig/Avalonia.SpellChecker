@@ -14,7 +14,7 @@ public class SpellCheckerTextPresenter : TextPresenter
 {
 
     private SpellChecker spellChecker;
-    private List<SpellCheckResult> spellCheckResults = null;
+    private List<SpellCheckEntry> spellCheckResults = null;
 
     public SpellChecker SpellChecker
     {
@@ -112,23 +112,7 @@ public class SpellCheckerTextPresenter : TextPresenter
             }
 
             textStyleOverrides = overrides.ToArray();
-            //textStyleOverrides = new[]
-            //     {
-            //            new ValueSpan<TextRunProperties>(
-            //                   2,
-            //                   3,
-            //                    new GenericTextRunProperties(
-            //                        typeface, FontFeatures, FontSize,
 
-            //                        textDecorations: dec,
-            //                        foregroundBrush: this.Foreground)),
-            //            new ValueSpan<TextRunProperties>(
-            //                   5,
-            //                   3,
-            //                    new GenericTextRunProperties(
-            //                        typeface, FontFeatures, FontSize,
-            //                        foregroundBrush: this.Foreground))
-            //        };
 
             styled = true;
         }
@@ -152,7 +136,8 @@ public class SpellCheckerTextPresenter : TextPresenter
 
         return result;
     }
-    public IEnumerable<string>? GetSuggestionsAt(Point point)
+
+    public IEnumerable<SpellCheckSuggestion>? GetSuggestionsAt(Point point)
     {
 
         if (spellCheckResults == null)
@@ -164,7 +149,7 @@ public class SpellCheckerTextPresenter : TextPresenter
 
         return spellCheckResults
             .Where(x => x.Start <= result.TextPosition && (x.Start + x.Length) >= result.TextPosition)
-            .Select(x => spellChecker.GetSuggestions(x.Word)).FirstOrDefault();
+            .Select(x => spellChecker.GetSuggestions(x.Word, x.Start, x.Length)).FirstOrDefault();
     }
 
     private static string? GetCombinedText(string? text, int caretIndex, string? preeditText)
