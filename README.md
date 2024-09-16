@@ -1,5 +1,6 @@
 
 
+
 # Avalonia Spell Checker for TextBox
 
 
@@ -92,6 +93,18 @@ According to ChatGPT, these are the most reliable and updated sources for downlo
    ~~- [Hunspell Dictionaries on GitHub](https://github.com/hunspell/hunspell/tree/master/dictionaries)~~ 404
 
 These sources are widely trusted and offer dictionaries that are kept up-to-date by large communities and projects.
+
+
+
+## Known Issues
+
+- **Border Style on Focus Not Applied**: When the `TextBox` control receives focus, the expected border style is not rendered as intended.
+
+- **Watermark Style Remains Unchanged on Focus**: The watermark (placeholder text) does not update its style when the `TextBox` gains focus, which may affect visual cues for the user.
+
+- **Platform Limitation**: These issues have been observed on Windows systems. The behavior on other operating systems has not been tested and is currently unknown.
+
+
 
 ## Customization
 
