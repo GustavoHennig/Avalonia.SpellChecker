@@ -14,7 +14,7 @@ Avalonia Spell Checker adds real-time spell-checking to Avalonia TextBox control
 - **Custom Dictionaries** (TODO): Add or manage custom words for specific languages. 
 - **Context Menu Integration**: Provides suggestions for misspelled words in a context menu.
 - **Customization** (WIP): Developers can modify styles for underlining and other text decorations for incorrect words.
-- **Support for Multiple Languages**: Allows the use of different language dictionaries simultaneally.
+- **Support for Multiple Languages**: Allows the use of different language dictionaries simultaneously.
 
 
 ## Getting Started
@@ -47,15 +47,18 @@ To enable spell checking for a `TextBox` control, initialize `TextBoxSpellChecke
 ```csharp
 public partial class MainWindow : Window
 {
-    private readonly TextBoxSpellChecker textBoxSpellChecker = new TextBoxSpellChecker();
+    private readonly TextBoxSpellChecker textBoxSpellChecker;
 
     public MainWindow()
     {
         InitializeComponent();
+
+		// Initialize the spell checker
+		// * default dictionaries directory is Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Dictionaries"))
+		textBoxSpellChecker = new TextBoxSpellChecker(SpellCheckerConfig.Create("pt_BR", "en_GB"));
+
         var textBox = this.FindControl<TextBox>("tbDescription");
-        textBoxSpellChecker.Initialize(textBox, new SpellCheckerConfig {
-			DictionariesFolder = "path/to/dictionaries"
-		});
+        textBoxSpellChecker.Initialize(textBox);
 	}
 }
 ```
