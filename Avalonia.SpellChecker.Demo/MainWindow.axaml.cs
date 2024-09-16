@@ -5,7 +5,7 @@ namespace Avalonia.SpellChecker.Demo;
 
 public partial class MainWindow : Window
 {
-    private readonly TextBoxSpellChecker extendTextBox;
+    private readonly TextBoxSpellChecker textBoxSpellChecker;
 
     public MainWindow()
     {
@@ -16,9 +16,9 @@ public partial class MainWindow : Window
         var textBox = this.FindControl<TextBox>("tbUserName");
 
 
-        extendTextBox = new TextBoxSpellChecker(SpellCheckerConfig.Create("pt_BR", "en_GB"));
-        extendTextBox.Initialize(textBox);
-        extendTextBox.Initialize(this.FindControl<TextBox>("tbNotes"));
+        textBoxSpellChecker = new TextBoxSpellChecker(SpellCheckerConfig.Create(/*"pt_BR", */"en_GB"));
+        textBoxSpellChecker.Initialize(textBox);
+        textBoxSpellChecker.Initialize(this.FindControl<TextBox>("tbNotes"));
 
     }
 
