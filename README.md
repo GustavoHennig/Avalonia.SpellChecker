@@ -51,13 +51,13 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-		// Initialize the spell checker
-		// * default dictionaries directory is Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Dictionaries"))
-		textBoxSpellChecker = new TextBoxSpellChecker(SpellCheckerConfig.Create("pt_BR", "en_GB"));
+        // Initialize the spell checker
+        // * default dictionaries directory is Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Dictionaries"))
+        textBoxSpellChecker = new TextBoxSpellChecker(SpellCheckerConfig.Create("pt_BR", "en_GB"));
 
         var textBox = this.FindControl<TextBox>("tbDescription");
         textBoxSpellChecker.Initialize(textBox);
-	}
+    }
 }
 ```
 
