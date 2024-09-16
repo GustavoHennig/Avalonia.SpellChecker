@@ -12,11 +12,11 @@
 			<Setter.Value>
 				<ControlTemplate>
 					<Border Name="border"
-				  Background="{TemplateBinding Background}"
-				  BorderBrush="{TemplateBinding BorderBrush}"
-				  BorderThickness="{TemplateBinding BorderThickness}"
-				  CornerRadius="{TemplateBinding CornerRadius}">
-						<DockPanel Margin="{TemplateBinding Padding}"
+						  Background="{TemplateBinding Background}"
+						  BorderBrush="{TemplateBinding BorderBrush}"
+						  BorderThickness="{TemplateBinding BorderThickness}"
+						  CornerRadius="{TemplateBinding CornerRadius}">
+						<DockPanel 
 								   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 								   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
 
@@ -57,7 +57,9 @@
 													   Opacity="0.5"
 													   Text="{TemplateBinding Watermark}"
 													   TextAlignment="{TemplateBinding TextAlignment}"
-													   TextWrapping="{TemplateBinding TextWrapping}">
+													   TextWrapping="{TemplateBinding TextWrapping}"
+																	Margin="{TemplateBinding Padding}"
+													   >
 												<TextBlock.IsVisible>
 													<MultiBinding Converter="{x:Static BoolConverters.And}">
 														<Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
@@ -65,30 +67,29 @@
 													</MultiBinding>
 												</TextBlock.IsVisible>
 											</TextBlock>
-					
-							<local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
-																CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
-															   CaretBrush="{TemplateBinding CaretBrush}"
-															   CaretIndex="{TemplateBinding CaretIndex}"
-															   LineHeight="{TemplateBinding LineHeight}"
-															   LetterSpacing="{TemplateBinding LetterSpacing}"
-															   PasswordChar="{TemplateBinding PasswordChar}"
-															   RevealPassword="{TemplateBinding RevealPassword}"
-															   SelectionBrush="{TemplateBinding SelectionBrush}"
-															   SelectionEnd="{TemplateBinding SelectionEnd}"
-															   SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-															   SelectionStart="{TemplateBinding SelectionStart}"
-															   Text="{TemplateBinding Text,Mode=TwoWay}"
-															   TextAlignment="{TemplateBinding TextAlignment}"
-															   TextWrapping="{TemplateBinding TextWrapping}"
-																IsHitTestVisible="True"
-																Margin="{TemplateBinding Margin}"
-																VerticalAlignment="{TemplateBinding VerticalAlignment}"
-																Background="{TemplateBinding Background}"
-																HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
 
+											<local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
+																				CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+																			   CaretBrush="{TemplateBinding CaretBrush}"
+																			   CaretIndex="{TemplateBinding CaretIndex}"
+																			   LineHeight="{TemplateBinding LineHeight}"
+																			   LetterSpacing="{TemplateBinding LetterSpacing}"
+																			   PasswordChar="{TemplateBinding PasswordChar}"
+																			   RevealPassword="{TemplateBinding RevealPassword}"
+																			   SelectionBrush="{TemplateBinding SelectionBrush}"
+																			   SelectionEnd="{TemplateBinding SelectionEnd}"
+																			   SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+																			   SelectionStart="{TemplateBinding SelectionStart}"
+																			   Text="{TemplateBinding Text,Mode=TwoWay}"
+																			   TextAlignment="{TemplateBinding TextAlignment}"
+																			   TextWrapping="{TemplateBinding TextWrapping}"
+																				Margin="{TemplateBinding Padding}"
+																				VerticalAlignment="{TemplateBinding VerticalAlignment}"
+																				HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+																				Focusable="False"
+																				IsHitTestVisible="True"
+																				
 																 />
-											<!--Cursor="Ibeam"-->
 										</Panel>
 										<ScrollViewer.Styles>
 											<Style Selector="ScrollContentPresenter#PART_ContentPresenter">

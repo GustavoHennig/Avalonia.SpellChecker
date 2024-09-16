@@ -86,7 +86,7 @@ public class SpellCheckerTextPresenter : TextPresenter
             }
         }
 
-        if (Text?.Length > 1)
+        if (PasswordChar == default(char) && Text?.Length > 1)
         {
             var misspellesWordTextDecorations = new TextDecorationCollection();
             misspellesWordTextDecorations.Add(MisspelledWordDecoration);

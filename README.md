@@ -1,4 +1,5 @@
 
+
 # Avalonia Spell Checker for TextBox
 
 
@@ -13,7 +14,7 @@ Avalonia Spell Checker adds real-time spell-checking to Avalonia TextBox control
 - **Custom Dictionaries** (TODO): Add or manage custom words for specific languages. 
 - **Context Menu Integration**: Provides suggestions for misspelled words in a context menu.
 - **Customization** (WIP): Developers can modify styles for underlining and other text decorations for incorrect words.
-- **Support for Multiple Languages**: Allows the use of different language dictionaries.
+- **Support for Multiple Languages**: Allows the use of different language dictionaries simultaneally.
 
 
 ## Getting Started
@@ -66,7 +67,7 @@ When the `TextBox` control is detached from the view, the spell checker automati
 ## Dictionary Files
 
 
-According to ChatGPT, these are the most reliable and updated sources for downloading Hunspell dictionary files:
+According to ChatGPT, these are the most reliable and updated sources for downloading Hunspell dictionary files (ok, it seems that the first one is the easiest choice):
 
 
 1. **LibreOffice Dictionaries Repository**:
@@ -84,8 +85,8 @@ According to ChatGPT, these are the most reliable and updated sources for downlo
    - [Apache OpenOffice Dictionaries](https://extensions.openoffice.org/en/search?f%5B0%5D=field_project_tags%3A157)
 
 4. **Hunspell Dictionaries Collection**:
-   The Hunspell project itself hosts a repository of dictionaries:
-   - [Hunspell Dictionaries on GitHub](https://github.com/hunspell/hunspell/tree/master/dictionaries)
+   ~~The Hunspell project itself hosts a repository of dictionaries:~~
+   ~~- [Hunspell Dictionaries on GitHub](https://github.com/hunspell/hunspell/tree/master/dictionaries)~~ 404
 
 These sources are widely trusted and offer dictionaries that are kept up-to-date by large communities and projects.
 
@@ -98,10 +99,10 @@ You can customize the behavior and appearance of the spell checker by modifying:
 
 ## TODO
 
-- [ ] Implement custom word management (add/remove custom words).
+- [ ] Implement custom word management (add/remove custom words) WIP.
 - [ ] Allow dynamic enabling/disabling of spell checking.
 - [ ] Improve performance for larger text inputs.
-- [ ] Include dictionary files for multiple languages.
+- [X] Include dictionary files for multiple languages.
 
 ## Contributing
 

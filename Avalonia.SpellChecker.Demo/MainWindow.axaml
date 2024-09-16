@@ -1,23 +1,23 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
-        xmlns:local="clr-namespace:Avalonia.SpellChecker.Demo"
-        x:Class="Avalonia.SpellChecker.Demo.MainWindow"
-        Title="Avalonia Spell Checker Demo">
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+		xmlns:local="clr-namespace:Avalonia.SpellChecker.Demo"
+		x:Class="Avalonia.SpellChecker.Demo.MainWindow"
+		Title="Avalonia Spell Checker Demo">
 	<StackPanel Margin="20">
 		<TextBlock Margin="0 5" >Name:</TextBlock>
-		<TextBox x:Name="tbUserName" Watermark="Enter your name" Cursor="Arrow"/>
+		<TextBox x:Name="tbUserName" Watermark="Enter your name" Cursor="Arrow" />
 
-		<TextBlock Margin="0 5" >Name 2:</TextBlock>
-		<TextBox x:Name="tbUserName2" Watermark="Enter your name" Cursor="Arrow"/>
+		<TextBlock Margin="0 5" >Name (without spell checking):</TextBlock>
+		<TextBox x:Name="tbUserName2" Watermark="Enter your name" Cursor="Arrow" />
 
 		<TextBlock Margin="0 15 0 5">Notes:</TextBlock>
 		<TextBox x:Name="tbNotes" Height="100" 
-				 TextWrapping="Wrap" VerticalAlignment="Top" />
+				 TextWrapping="Wrap" VerticalAlignment="Top" AcceptsReturn="True" />
 
-		<TextBlock Margin="0 15 0 5">Notes without spell checking:</TextBlock>
-		<TextBox x:Name="tbNotes2" Height="100" TextWrapping="Wrap" VerticalAlignment="Top" />
+		<TextBlock Margin="0 15 0 5">Notes (without spell checking):</TextBlock>
+		<TextBox x:Name="tbNotes2" Height="100" TextWrapping="Wrap" VerticalAlignment="Top" AcceptsReturn="True" />
 	</StackPanel>
 </Window>
