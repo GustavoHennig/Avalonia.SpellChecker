@@ -12,10 +12,13 @@
 			<Setter.Value>
 				<ControlTemplate>
 					<Border Name="border"
-						  Background="{TemplateBinding Background}"
-						  BorderBrush="{TemplateBinding BorderBrush}"
+						  Background="{DynamicResource TextControlBackground}"
+						  BorderBrush="{DynamicResource TextControlBorderBrush}"
 						  BorderThickness="{TemplateBinding BorderThickness}"
-						  CornerRadius="{TemplateBinding CornerRadius}">
+						  CornerRadius="{TemplateBinding CornerRadius}"
+							
+							>
+						
 						<DockPanel 
 								   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 								   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
@@ -70,15 +73,15 @@
 
 											<local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
 																				CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
-																			   CaretBrush="{TemplateBinding CaretBrush}"
+																			   CaretBrush="{DynamicResource  CaretBrush}"
 																			   CaretIndex="{TemplateBinding CaretIndex}"
 																			   LineHeight="{TemplateBinding LineHeight}"
 																			   LetterSpacing="{TemplateBinding LetterSpacing}"
 																			   PasswordChar="{TemplateBinding PasswordChar}"
 																			   RevealPassword="{TemplateBinding RevealPassword}"
-																			   SelectionBrush="{TemplateBinding SelectionBrush}"
+																			   SelectionBrush="{DynamicResource SelectionBrush}"
 																			   SelectionEnd="{TemplateBinding SelectionEnd}"
-																			   SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+																			   SelectionForegroundBrush="{DynamicResource SelectionForegroundBrush}"
 																			   SelectionStart="{TemplateBinding SelectionStart}"
 																			   Text="{TemplateBinding Text,Mode=TwoWay}"
 																			   TextAlignment="{TemplateBinding TextAlignment}"
@@ -108,4 +111,27 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<!--
+	<Style Selector="TextBox:pointerover /template/ Border#border">
+		<Setter Property="BorderBrush" Value="{TemplateBinding Te}" />
+	</Style>
+
+	<Style Selector="TextBox:focus /template/ Border#border">
+		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushFocused}" />
+	</Style>
+
+	<Style Selector="TextBox:error /template/ Border#border">
+		<Setter Property="BorderBrush" Value="{DynamicResource ErrorBrush}" />
+	</Style>
+	<Style Selector="TextBox /template/ DockPanel">
+		<Setter Property="Cursor" Value="IBeam" />
+	</Style>
+	<Style Selector="TextBox:disabled /template/ Border#border">
+		<Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}" />
+	</Style>
+	<Style Selector="TextBox /template/ TextBlock#floatingWatermark">
+		<Setter Property="Cursor" Value="IBeam"/>
+	</Style>
+	
+	-->
 </Styles>
