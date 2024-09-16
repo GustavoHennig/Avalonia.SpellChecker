@@ -11,127 +11,90 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<Border Name="border"
-						  Background="{DynamicResource TextControlBackground}"
-						  BorderBrush="{DynamicResource TextControlBorderBrush}"
-						  BorderThickness="{TemplateBinding BorderThickness}"
-						  CornerRadius="{TemplateBinding CornerRadius}"
-							
-							>
-						
-						<DockPanel 
-								   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-								   VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+					<DataValidationErrors>
+						<Panel>
+							<Border
+							  Name="PART_BorderElement"
+							  Background="{TemplateBinding Background}"
+							  BorderBrush="{TemplateBinding BorderBrush}"
+							  BorderThickness="{TemplateBinding BorderThickness}"
+							  CornerRadius="{TemplateBinding CornerRadius}"
+							  MinWidth="{TemplateBinding MinWidth}"
+							  MinHeight="{TemplateBinding MinHeight}">
+							</Border>
 
-							<TextBlock Name="floatingWatermark"
-									   DockPanel.Dock="Top"
-									   FontSize="{DynamicResource FontSizeSmall}"
-									   Foreground="{DynamicResource ThemeAccentBrush}"
-									   Text="{TemplateBinding Watermark}">
-								<TextBlock.IsVisible>
-									<MultiBinding Converter="{x:Static BoolConverters.And}">
-										<Binding Path="UseFloatingWatermark"
-												 RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Converter="{x:Static StringConverters.IsNotNullOrEmpty}"
-												 Path="Text"
-												 RelativeSource="{RelativeSource TemplatedParent}" />
-									</MultiBinding>
-								</TextBlock.IsVisible>
-							</TextBlock>
-
-							<DataValidationErrors>
-
-								<Grid ColumnDefinitions="Auto,*,Auto">
+							<Border
+							  Margin="{TemplateBinding BorderThickness}">
+								<Grid ColumnDefinitions="Auto,*,Auto" >
 									<ContentPresenter Grid.Column="0"
 													  Grid.ColumnSpan="1"
-													  Content="{TemplateBinding InnerLeftContent}" />
-									<ScrollViewer Name="PART_ScrollViewer"
-												  Grid.Column="1"
-												  Grid.ColumnSpan="1"
-												  AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
-												  BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}"
-												  HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
-												  IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
-												  VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
-										<Panel>
-											<TextBlock Name="watermark"
-													   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-													   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-													   Opacity="0.5"
-													   Text="{TemplateBinding Watermark}"
-													   TextAlignment="{TemplateBinding TextAlignment}"
-													   TextWrapping="{TemplateBinding TextWrapping}"
-																	Margin="{TemplateBinding Padding}"
-													   >
-												<TextBlock.IsVisible>
-													<MultiBinding Converter="{x:Static BoolConverters.And}">
-														<Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
-														<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
-													</MultiBinding>
-												</TextBlock.IsVisible>
-											</TextBlock>
+													  Content="{TemplateBinding InnerLeftContent}"/>
+									<DockPanel x:Name="PART_InnerDockPanel"
+											   Grid.Column="1"
+											   Grid.ColumnSpan="1"
+											 >
+										<TextBlock Name="PART_FloatingWatermark"
+												   Foreground="{DynamicResource SystemAccentColor}"
+												   IsVisible="False"
+												   Text="{TemplateBinding Watermark}"
+												   DockPanel.Dock="Top" />
+										<ScrollViewer Name="PART_ScrollViewer"
+													  HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+													  VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+													  IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+													  AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+													  BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
+											<Panel>
+												<TextBlock Name="PART_Watermark"
+														Opacity="0.5"
+														  Margin="{TemplateBinding Padding}"
+														   Text="{TemplateBinding Watermark}"
+														TextAlignment="{TemplateBinding TextAlignment}"
+														TextWrapping="{TemplateBinding TextWrapping}"
+														HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+														VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+													<TextBlock.IsVisible>
+														<MultiBinding Converter="{x:Static BoolConverters.And}">
+															<Binding ElementName="PART_TextPresenter" Path="PreeditText" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
+															<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Text" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
+														</MultiBinding>
+													</TextBlock.IsVisible>
+												</TextBlock>
 
-											<local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
-																				CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
-																			   CaretBrush="{DynamicResource  CaretBrush}"
-																			   CaretIndex="{TemplateBinding CaretIndex}"
-																			   LineHeight="{TemplateBinding LineHeight}"
-																			   LetterSpacing="{TemplateBinding LetterSpacing}"
-																			   PasswordChar="{TemplateBinding PasswordChar}"
-																			   RevealPassword="{TemplateBinding RevealPassword}"
-																			   SelectionBrush="{DynamicResource SelectionBrush}"
-																			   SelectionEnd="{TemplateBinding SelectionEnd}"
-																			   SelectionForegroundBrush="{DynamicResource SelectionForegroundBrush}"
-																			   SelectionStart="{TemplateBinding SelectionStart}"
-																			   Text="{TemplateBinding Text,Mode=TwoWay}"
-																			   TextAlignment="{TemplateBinding TextAlignment}"
-																			   TextWrapping="{TemplateBinding TextWrapping}"
-																				Margin="{TemplateBinding Padding}"
-																				VerticalAlignment="{TemplateBinding VerticalAlignment}"
-																				HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-																				Focusable="False"
-																				IsHitTestVisible="True"
-																				
+												<local:SpellCheckerTextPresenter	x:Name="PART_TextPresenter"
+																					Text="{TemplateBinding Text, Mode=TwoWay}"
+																					CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+																					CaretIndex="{TemplateBinding CaretIndex}"
+																					SelectionStart="{TemplateBinding SelectionStart}"
+																					SelectionEnd="{TemplateBinding SelectionEnd}"
+																					TextAlignment="{TemplateBinding TextAlignment}"
+																					TextWrapping="{TemplateBinding TextWrapping}"
+																					LineHeight="{TemplateBinding LineHeight}"
+																					LetterSpacing="{TemplateBinding LetterSpacing}"
+																					PasswordChar="{TemplateBinding PasswordChar}"
+																					RevealPassword="{TemplateBinding RevealPassword}"
+																					SelectionBrush="{TemplateBinding SelectionBrush}"
+																					SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+																					CaretBrush="{TemplateBinding CaretBrush}"
+																					HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+																					VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+																					Margin="{TemplateBinding Padding}"
 																 />
-										</Panel>
-										<ScrollViewer.Styles>
-											<Style Selector="ScrollContentPresenter#PART_ContentPresenter">
-												<Setter Property="Cursor" Value="IBeam" />
-											</Style>
-										</ScrollViewer.Styles>
-									</ScrollViewer>
-									<ContentPresenter Grid.Column="2"
-													  Grid.ColumnSpan="1"
-													  Content="{TemplateBinding InnerRightContent}" />
+											</Panel>
+											<ScrollViewer.Styles>
+												<Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+													<Setter Property="Cursor" Value="IBeam" />
+												</Style>
+											</ScrollViewer.Styles>
+										</ScrollViewer>
+									</DockPanel>
+									<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
 								</Grid>
-							</DataValidationErrors>
-						</DockPanel>
-					</Border>
+							</Border>
+						</Panel>
+					</DataValidationErrors>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<!--
-	<Style Selector="TextBox:pointerover /template/ Border#border">
-		<Setter Property="BorderBrush" Value="{TemplateBinding Te}" />
-	</Style>
-
-	<Style Selector="TextBox:focus /template/ Border#border">
-		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushFocused}" />
-	</Style>
-
-	<Style Selector="TextBox:error /template/ Border#border">
-		<Setter Property="BorderBrush" Value="{DynamicResource ErrorBrush}" />
-	</Style>
-	<Style Selector="TextBox /template/ DockPanel">
-		<Setter Property="Cursor" Value="IBeam" />
-	</Style>
-	<Style Selector="TextBox:disabled /template/ Border#border">
-		<Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}" />
-	</Style>
-	<Style Selector="TextBox /template/ TextBlock#floatingWatermark">
-		<Setter Property="Cursor" Value="IBeam"/>
-	</Style>
-	
-	-->
 </Styles>

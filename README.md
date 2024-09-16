@@ -1,13 +1,10 @@
-
-
-
 # Avalonia Spell Checker for TextBox
 
 
 Avalonia Spell Checker adds real-time spell-checking to Avalonia TextBox controls without replacing or changing their behavior. It uses the WeCantSpell.Hunspell library for spell-checking and allows you to manage custom dictionaries. The extension integrates with existing TextBox elements and provides suggestions for misspelled words through a context menu.
 
 
-![Demonstration screenshot](demo-screenshot1.png)
+![Demonstration screenshot](avalonia-spell-checker-demo.gif)
 
 ## Features
 
@@ -98,6 +95,8 @@ These sources are widely trusted and offer dictionaries that are kept up-to-date
 
 ## Known Issues
 
+
+- **Works only with Fluent theme**
 - **Border Style on Focus Not Applied**: When the `TextBox` control receives focus, the expected border style is not rendered as intended.
 
 - **Watermark Style Remains Unchanged on Focus**: The watermark (placeholder text) does not update its style when the `TextBox` gains focus, which may affect visual cues for the user.
