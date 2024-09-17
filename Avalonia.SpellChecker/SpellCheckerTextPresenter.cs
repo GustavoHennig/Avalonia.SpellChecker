@@ -3,7 +3,10 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Utilities;
+using System.Diagnostics;
 using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Avalonia.SpellChecker;
 
@@ -13,13 +16,15 @@ namespace Avalonia.SpellChecker;
 public class SpellCheckerTextPresenter : TextPresenter
 {
 
-    private SpellChecker spellChecker;
-    private List<SpellCheckEntry> spellCheckResults = null;
-
+    private SpellChecker _spellChecker;
+    private List<SpellCheckEntry> _spellCheckResults;
+    private readonly List<ValueSpan<TextRunProperties>> _overridesCacheSpellChecking;
+    private string? _overridesCacheKey;
+    private Size _constraint;
     public SpellChecker SpellChecker
     {
-        get { return this.spellChecker; }
-        set { this.spellChecker = value; }
+        get { return this._spellChecker; }
+        set { this._spellChecker = value; }
     }
 
     public TextDecoration MisspelledWordDecoration { get; set; }
@@ -36,6 +41,7 @@ public class SpellCheckerTextPresenter : TextPresenter
             StrokeThickness = 22.5
         };
 
+        _overridesCacheSpellChecking = new List<ValueSpan<TextRunProperties>>();
     }
 
     protected override TextLayout CreateTextLayout()
@@ -60,7 +66,7 @@ public class SpellCheckerTextPresenter : TextPresenter
             textDecorations: null, // No decorations by default
             foregroundBrush: foreground);
 
-        List<ValueSpan<TextRunProperties>> overrides = new List<ValueSpan<TextRunProperties>>();
+        IReadOnlyList<ValueSpan<TextRunProperties>>? textStyleOverrides = null;
 
         if (!string.IsNullOrEmpty(preeditText))
         {
@@ -69,72 +75,100 @@ public class SpellCheckerTextPresenter : TextPresenter
                     foregroundBrush: foreground,
                     textDecorations: TextDecorations.Underline));
 
-            overrides.Add(preeditHighlight);
+            textStyleOverrides = new[]
+            {
+                    preeditHighlight
+            };
         }
         else
         {
             if (length > 0 && SelectionForegroundBrush != null)
             {
-                overrides.Add(
-                        new ValueSpan<TextRunProperties>(
-                               start,
-                               length,
-                                new GenericTextRunProperties(
-                                    typeface, FontFeatures, FontSize,
-                                    foregroundBrush: SelectionForegroundBrush))
-                    );
+                textStyleOverrides = new[]
+                {
+                    new ValueSpan<TextRunProperties>(
+                            start,
+                            length,
+                            new GenericTextRunProperties(
+                                typeface, FontFeatures, FontSize,
+                                foregroundBrush: SelectionForegroundBrush))
+                };
             }
         }
 
         if (PasswordChar == default(char) && Text?.Length > 1)
         {
-            var misspellesWordTextDecorations = new TextDecorationCollection();
-            misspellesWordTextDecorations.Add(MisspelledWordDecoration);
+            List<ValueSpan<TextRunProperties>> overrides = _overridesCacheSpellChecking;
 
-            spellCheckResults = spellChecker.CheckSpellingFullText(Text);
-
-            var underlineProp = new GenericTextRunProperties(
-                                    typeface,
-                                    FontFeatures,
-                                    FontSize,
-                                    textDecorations: misspellesWordTextDecorations,
-                                    foregroundBrush: foreground);
-
-            int currentPosition = 0;
-
-
-            foreach (var word in spellCheckResults)
+            if (Text != _overridesCacheKey)
             {
-                // If there is a gap between currentPosition and the start of the misspelled word
-                if (word.Start > currentPosition)
+
+                // Reuses the overridesCacheSpellChecking list to avoid creating a new list every time
+                overrides.Clear();
+
+
+                var misspellesWordTextDecorations = new TextDecorationCollection();
+                misspellesWordTextDecorations.Add(MisspelledWordDecoration);
+
+                _spellCheckResults = _spellChecker.CheckSpellingFullText(Text);
+
+                var underlineProp = new GenericTextRunProperties(
+                                        typeface,
+                                        FontFeatures,
+                                        FontSize,
+                                        textDecorations: misspellesWordTextDecorations,
+                                        foregroundBrush: foreground);
+
+                int currentPosition = 0;
+
+
+                foreach (var word in _spellCheckResults)
                 {
-                    // Add a ValueSpan with the default decoration for the gap
-                    overrides.Add(new ValueSpan<TextRunProperties>(currentPosition, word.Start - currentPosition, defaultTextRunProperties));
+                    // If there is a gap between currentPosition and the start of the misspelled word
+                    if (word.Start > currentPosition)
+                    {
+                        // Add a ValueSpan with the default decoration for the gap
+                        overrides.Add(new ValueSpan<TextRunProperties>(currentPosition, word.Start - currentPosition, defaultTextRunProperties));
+                    }
+
+                    overrides.Add(new ValueSpan<TextRunProperties>(word.Start, word.Length, underlineProp));
+
+                    currentPosition = word.Start + word.Length;
                 }
 
-                overrides.Add(new ValueSpan<TextRunProperties>(word.Start, word.Length, underlineProp));
-
-                currentPosition = word.Start + word.Length;
+                // If there is any text left after the last misspelled word, add a default decoration
+                if (currentPosition < Text.Length)
+                {
+                    overrides.Add(new ValueSpan<TextRunProperties>(currentPosition, Text.Length - currentPosition, defaultTextRunProperties));
+                }
+                _overridesCacheKey = Text;
+                //Debug.Print($"Added to cache {Text}");
             }
-
-            // If there is any text left after the last misspelled word, add a default decoration
-            if (currentPosition < Text.Length)
+            else
             {
-                overrides.Add(new ValueSpan<TextRunProperties>(currentPosition, Text.Length - currentPosition, defaultTextRunProperties));
+                //Debug.Print($"Cache used {Text}");
             }
 
+            if (overrides.Count > 0)
+            {
+                if (textStyleOverrides == null)
+                {
+                    textStyleOverrides = overrides.ToArray();
+                }
+                else
+                {
+                    textStyleOverrides = Enumerable.Concat(textStyleOverrides, overrides).ToArray();
+                }
+            }
         }
-
-        // Convert the overrides to an array for the TextLayout
-        var textStyleOverrides = overrides.ToArray();
 
         if (PasswordChar != default(char) && !RevealPassword)
         {
-            result = CreateTextLayoutInternal(this.DesiredSize, new string(PasswordChar, text?.Length ?? 0), typeface, textStyleOverrides);
+            result = CreateTextLayoutInternal(_constraint, new string(PasswordChar, text?.Length ?? 0), typeface, textStyleOverrides);
         }
         else
         {
-            result = CreateTextLayoutInternal(this.DesiredSize, text, typeface, textStyleOverrides);
+            result = CreateTextLayoutInternal(_constraint, text, typeface, textStyleOverrides);
         }
 
         return result;
@@ -143,16 +177,22 @@ public class SpellCheckerTextPresenter : TextPresenter
     public IEnumerable<SpellCheckSuggestion>? GetSuggestionsAt(Point point)
     {
 
-        if (spellCheckResults == null)
+        if (_spellCheckResults == null)
         {
             return null;
         }
 
         var result = TextLayout.HitTestPoint(point);
 
-        return spellCheckResults
+        return _spellCheckResults
             .Where(x => x.Start <= result.TextPosition && (x.Start + x.Length) >= result.TextPosition)
-            .Select(x => spellChecker.GetSuggestions(x.Word, x.Start, x.Length)).FirstOrDefault();
+            .Select(x => _spellChecker.GetSuggestions(x.Word, x.Start, x.Length)).FirstOrDefault();
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        _constraint = availableSize;
+        return base.MeasureOverride(availableSize);
     }
 
     private static string? GetCombinedText(string? text, int caretIndex, string? preeditText)
