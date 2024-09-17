@@ -4,12 +4,13 @@
 
 Avalonia Spell Checker adds real-time spell-checking to Avalonia TextBox controls without replacing or changing their behavior. It uses the WeCantSpell.Hunspell library for spell-checking and allows you to manage custom dictionaries. The extension integrates with existing TextBox elements and provides suggestions for misspelled words through a context menu.
 
-<div style="display: flex; gap: 10px; flex-wrap: nowrap;">
 
+<p float="left">
+   
 ![Demonstration screenshot](avalonia-spell-checker-demo.gif)
 ![Demonstration screenshot](demo-screenshot-mac.png)
 
-</div>
+</p>
 
 ## Features
 
