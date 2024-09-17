@@ -1,5 +1,9 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.VisualTree;
 using System.Windows.Input;
 
@@ -100,8 +104,6 @@ namespace Avalonia.SpellChecker
                 return;
             }
 
-            var transientMenuFalyout = new MenuFlyout();
-
 
             if (!e.TryGetPosition(textBox, out Point point))
             {
@@ -126,31 +128,68 @@ namespace Avalonia.SpellChecker
                 return;
             }
 
+            MenuFlyout? transientMenuFalyout = contextFlyout;
+
+            transientMenuFalyout.Closed += this.TransientMenuFalyout_Closed;
+
+            if (transientMenuFalyout is null)
+            {
+
+
+                transientMenuFalyout = new MenuFlyout();
+
+                foreach (var existingItem in contextFlyout.Items)
+                {
+
+                    if (existingItem is MenuItem mi)
+                    {
+                        object? icon = mi.Icon;
+                        if (mi.Icon is Controls.Shapes.Path iconPath)
+                        {
+
+                            var p = new Controls.Shapes.Path
+                            {
+                                Data = iconPath.Data?.Clone(),
+                                Height = iconPath.Height,
+                                Width = iconPath.Width,
+                                VerticalAlignment = iconPath.VerticalAlignment,
+                                RenderTransform = iconPath.RenderTransform
+                            };
+                            icon = p;
+                        }
+
+
+                        transientMenuFalyout.Items.Add(new MenuItem
+                        {
+                            Header = mi.Header,
+                            HeaderTemplate = mi.HeaderTemplate,
+                            Command = mi.Command,
+                            CommandParameter = mi.CommandParameter,
+                            IsEnabled = mi.IsEnabled,
+                            HotKey = mi.HotKey,
+                            InputGesture = mi.InputGesture,
+                            Icon = icon,
+                            Template = mi.Template
+                        });
+                    }
+                }
+            }
+
             foreach (var suggestion in suggestions)
             {
-                transientMenuFalyout.Items.Add(new MenuItem { Header = suggestion.WordSuggested, Command = new AcceptSuggestionCommand(SuggestionSelected, textBox, suggestion) });
+                transientMenuFalyout.Items.Add(new MenuItem
+                {
+                    Header = suggestion.WordSuggested,
+
+                    Tag = "spell",
+                    Command = new AcceptSuggestionCommand(SuggestionSelected, textBox, suggestion)
+                });
 
             }
 
             if (suggestions.Any())
             {
-                transientMenuFalyout.Items.Add(new MenuItem() { Header = "-" });
-            }
-
-            foreach (var existingItem in contextFlyout.Items)
-            {
-                if (existingItem is MenuItem mi)
-                {
-                    transientMenuFalyout.Items.Add(new MenuItem
-                    {
-                        Header = mi.Header,
-                        Command = mi.Command,
-                        CommandParameter = mi.CommandParameter,
-                        IsEnabled = mi.IsEnabled,
-                        HotKey = mi.HotKey,
-                        InputGesture = mi.InputGesture
-                    });
-                }
+                transientMenuFalyout.Items.Add(new MenuItem() { Header = "-", Tag = "spell" });
             }
 
 
@@ -158,6 +197,20 @@ namespace Avalonia.SpellChecker
 
 
             e.Handled = true;
+        }
+
+        private void TransientMenuFalyout_Closed(object? sender, EventArgs e)
+        {
+            var menu = sender as MenuFlyout;
+
+
+            for (int i = menu.Items.Count - 1; i >= 0; i--)
+            {
+                if ((menu.Items[i] as MenuItem).Tag == "spell")
+                    menu.Items.RemoveAt(i);
+            }
+
+
         }
 
         private void SuggestionSelected(TextBox textBox, SpellCheckSuggestion suggestion)
