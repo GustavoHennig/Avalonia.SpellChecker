@@ -47,10 +47,8 @@ namespace Avalonia.SpellChecker
             // Add the style to the Window's Styles collection
             textBox.Styles.Add(styleInclude);
 
-
             // Initialize the SpellCheckerTextPresenter setting
             textBox.TemplateApplied += OnTemplateApplied;
-
 
             // Clean up
             textBox.DetachedFromLogicalTree += OnTextBoxDisposed;
@@ -128,95 +126,52 @@ namespace Avalonia.SpellChecker
                 return;
             }
 
-            MenuFlyout? transientMenuFalyout = contextFlyout;
+            // Remove suggestions after the context menu is closed
+            contextFlyout.Closed += this.TransientMenuFalyout_Closed;
 
-            transientMenuFalyout.Closed += this.TransientMenuFalyout_Closed;
-
-            if (transientMenuFalyout is null)
-            {
-
-
-                transientMenuFalyout = new MenuFlyout();
-
-                foreach (var existingItem in contextFlyout.Items)
-                {
-
-                    if (existingItem is MenuItem mi)
-                    {
-                        object? icon = mi.Icon;
-                        if (mi.Icon is Controls.Shapes.Path iconPath)
-                        {
-
-                            var p = new Controls.Shapes.Path
-                            {
-                                Data = iconPath.Data?.Clone(),
-                                Height = iconPath.Height,
-                                Width = iconPath.Width,
-                                VerticalAlignment = iconPath.VerticalAlignment,
-                                RenderTransform = iconPath.RenderTransform
-                            };
-                            icon = p;
-                        }
-
-
-                        transientMenuFalyout.Items.Add(new MenuItem
-                        {
-                            Header = mi.Header,
-                            HeaderTemplate = mi.HeaderTemplate,
-                            Command = mi.Command,
-                            CommandParameter = mi.CommandParameter,
-                            IsEnabled = mi.IsEnabled,
-                            HotKey = mi.HotKey,
-                            InputGesture = mi.InputGesture,
-                            Icon = icon,
-                            Template = mi.Template
-                        });
-                    }
-                }
-            }
+            int insertIndex = 0;
 
             foreach (var suggestion in suggestions)
             {
-                transientMenuFalyout.Items.Add(new MenuItem
+                contextFlyout.Items.Insert(insertIndex++, new MenuItem
                 {
                     Header = suggestion.WordSuggested,
-
                     Tag = "spell",
                     Command = new AcceptSuggestionCommand(SuggestionSelected, textBox, suggestion)
                 });
-
             }
 
-            if (suggestions.Any())
+            if (insertIndex > 0)
             {
-                transientMenuFalyout.Items.Add(new MenuItem() { Header = "-", Tag = "spell" });
+                contextFlyout.Items.Insert(insertIndex, new MenuItem() { Header = "-", Tag = "spell" });
             }
 
-
-            transientMenuFalyout.ShowAt(textBox, true);
-
+            contextFlyout.ShowAt(textBox, true);
 
             e.Handled = true;
         }
 
         private void TransientMenuFalyout_Closed(object? sender, EventArgs e)
         {
-            var menu = sender as MenuFlyout;
+            if (sender is not MenuFlyout menu)
+            {
+                return;
+            }
 
+            menu.Closed -= this.TransientMenuFalyout_Closed;
 
             for (int i = menu.Items.Count - 1; i >= 0; i--)
             {
-                if ((menu.Items[i] as MenuItem).Tag == "spell")
+                if (menu.Items[i] is MenuItem mi && "spell".Equals(mi.Tag))
+                {
                     menu.Items.RemoveAt(i);
+                }
             }
-
-
         }
 
         private void SuggestionSelected(TextBox textBox, SpellCheckSuggestion suggestion)
         {
-            // TODO: Receive TextBox, Suggestion position and replace the word
-            textBox.Text = textBox.Text
+            textBox.Text = textBox.Text?
                 .Remove(suggestion.OriginalWordPosition, suggestion.OriginalWordLength)
                 .Insert(suggestion.OriginalWordPosition, suggestion.WordSuggested);
         }
@@ -241,7 +196,7 @@ namespace Avalonia.SpellChecker
 
         public bool CanExecute(object? parameter)
         {
-            return true; // You can modify this to add custom logic
+            return true;
         }
 
         public void Execute(object? parameter)

@@ -1,3 +1,4 @@
+
 # Avalonia Spell Checker for TextBox
 
 
@@ -96,12 +97,9 @@ These sources are widely trusted and offer dictionaries that are kept up-to-date
 ## Known Issues
 
 
-- **Works only with Fluent theme**
-- **Border Style on Focus Not Applied**: When the `TextBox` control receives focus, the expected border style is not rendered as intended.
-
-- **Watermark Style Remains Unchanged on Focus**: The watermark (placeholder text) does not update its style when the `TextBox` gains focus, which may affect visual cues for the user.
-
-- **Platform Limitation**: These issues have been observed on Windows systems. The behavior on other operating systems has not been tested and is currently unknown.
+- Works only with Fluent theme
+- Keyboard context menu is not showing the suggestions
+- Only tested on Windows
 
 
 
