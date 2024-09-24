@@ -7,7 +7,7 @@ Avalonia Spell Checker adds real-time spell-checking to Avalonia TextBox control
 
 <p float="left">
    
-![Demonstration screenshot](avalonia-spell-checker-demo.gif)
+![Demonstration screenshot](avalonia-spell-checker-demo3.gif)
 ![Ignore demonstration screenshot](avalonia-spell-checker-ignore-demo.gif)
 ![Demonstration screenshot](demo-screenshot-mac.png)
 
@@ -16,9 +16,10 @@ Avalonia Spell Checker adds real-time spell-checking to Avalonia TextBox control
 ## Features
 
 - **Real-time Spell Checking**: Misspelled words are highlighted as the user types.
-- **Custom Dictionaries** (TODO): Add or manage custom words for specific languages. 
+- **Custom Dictionaries**: Add (or manage WIP) custom words for specific languages. 
 - **Context Menu Integration**: Provides suggestions for misspelled words in a context menu.
-- **Customization** (WIP): Developers can modify styles for underlining and other text decorations for incorrect words.
+- **Customization**: Developers can modify styles for underlining and other text decorations for incorrect words.
+- **Works with native Avalonia TextBox**: The library is minimally intrusive, integrating seamlessly with text control.
 - **Support for Multiple Languages**: Allows the use of different language dictionaries simultaneously.
 
 
@@ -115,11 +116,11 @@ These sources are widely trusted and offer dictionaries that are kept up-to-date
 You can customize the behavior and appearance of the spell checker by modifying:
 
 - **Text Styles**: Define how misspelled words are underlined or styled in `SpellCheckerTextPresenter.cs`. (WIP)
-- **Custom Dictionaries**: Add or remove custom words for specific languages through `DictionaryManager.cs`. (WIP)
+- **Custom Dictionaries**: Add or remove custom words for specific languages through `DictionaryManager.cs`.
 
 ## TODO
 
-- [ ] Implement custom word management (add/remove custom words) WIP.
+- [X] Implement custom word management (add/remove custom words).
 - [ ] Allow dynamic enabling/disabling of spell checking.
 - [ ] Improve performance for larger text inputs.
 - [X] Include dictionary files for multiple languages.

@@ -18,12 +18,19 @@ namespace Avalonia.SpellChecker
 
         private string BuildCustomDictionaryFileName(string language)
         {
-            if (string.IsNullOrEmpty(spellCheckerConfig.DictionariesFolder))
+
+            string? customDictionaryPath = spellCheckerConfig.CustomDictionariesFolder;
+            if (string.IsNullOrEmpty(customDictionaryPath))
+            {
+                customDictionaryPath = spellCheckerConfig.DictionariesFolder;
+            }
+
+            if (string.IsNullOrEmpty(customDictionaryPath))
             {
                 return $"CustomDictionary.{language}.txt";
             }
 
-            return Path.Combine(spellCheckerConfig.DictionariesFolder, $"CustomDictionary.{language}.txt");
+            return Path.Combine(customDictionaryPath, $"CustomDictionary.{language}.txt");
         }
 
 
