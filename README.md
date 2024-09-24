@@ -8,6 +8,7 @@ Avalonia Spell Checker adds real-time spell-checking to Avalonia TextBox control
 <p float="left">
    
 ![Demonstration screenshot](avalonia-spell-checker-demo.gif)
+![Ignore demonstration screenshot](avalonia-spell-checker-ignore-demo.gif)
 ![Demonstration screenshot](demo-screenshot-mac.png)
 
 </p>
