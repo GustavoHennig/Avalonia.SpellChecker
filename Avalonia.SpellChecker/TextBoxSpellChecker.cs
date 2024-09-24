@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using System.ComponentModel.Design;
 using System.Windows.Input;
 
 namespace Avalonia.SpellChecker
@@ -102,23 +103,31 @@ namespace Avalonia.SpellChecker
                 return;
             }
 
-
             if (!e.TryGetPosition(textBox, out Point point))
             {
                 return;
             }
 
-
             var textPresenter = textBox.GetVisualDescendants().OfType<Avalonia.SpellChecker.SpellCheckerTextPresenter>().FirstOrDefault();
-
 
             if (textPresenter is null)
             {
                 return;
             }
 
-            var suggestions = textPresenter.GetSuggestionsAt(point);
+            var suggestions = textPresenter.GetSuggestionsAt(point, out string mispelledWord);
 
+            if (!string.IsNullOrEmpty(mispelledWord))
+            {
+                contextFlyout.Items.Insert(0, new MenuItem()
+                {
+                    Header = "Ignore word",
+                    Tag = "spell",
+                    Command = new BasicCommand<string, TextBox>(IgnoreWordSelected, textBox),
+                    CommandParameter = mispelledWord
+                });
+                contextFlyout.Items.Insert(1, new MenuItem() { Header = "-", Tag = "spell" });
+            }
 
             if (suggestions is null)
             {
@@ -168,6 +177,16 @@ namespace Avalonia.SpellChecker
                 }
             }
         }
+        private void IgnoreWordSelected(string misspelledWord, TextBox textBox)
+        {
+            var spellChecker = new SpellChecker(config);
+            spellChecker.AddCustomWord(misspelledWord);
+            textBox
+                .GetVisualDescendants()
+                .OfType<Avalonia.SpellChecker.SpellCheckerTextPresenter>()
+                .FirstOrDefault()?
+                .ForceInvalidateTextLayout();
+        }
 
         private void SuggestionSelected(TextBox textBox, SpellCheckSuggestion suggestion)
         {
@@ -202,6 +221,30 @@ namespace Avalonia.SpellChecker
         public void Execute(object? parameter)
         {
             execute(this.textBox, this.suggestion);
+        }
+    }
+
+    public class BasicCommand<ArgType, ControlType> : ICommand
+    {
+        private readonly Action<ArgType, ControlType> execute;
+        private readonly ControlType control;
+
+        public BasicCommand(Action<ArgType, ControlType> execute, ControlType control)
+        {
+            this.control = control;
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        }
+
+        public event EventHandler? CanExecuteChanged;
+
+        public bool CanExecute(object? parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object? parameter)
+        {
+            execute((ArgType)parameter, control);
         }
     }
 }

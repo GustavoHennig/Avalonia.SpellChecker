@@ -4,21 +4,16 @@ namespace Avalonia.SpellChecker
 {
     public class SpellChecker
     {
-        //private readonly WordList _wordList;
-
-
         /// <summary>
         /// Keeps track of the dictionaries and custom words
         /// </summary>
-        private static DictionaryManager dictionaryManager;
+        private static DictionaryManager? dictionaryManager;
 
         public SpellChecker(SpellCheckerConfig spellCheckerConfig)
         {
             //_wordList = WordList.CreateFromFiles(dictionaryPath);
             dictionaryManager ??= new DictionaryManager(spellCheckerConfig);
         }
-
-
 
         public List<SpellCheckEntry> CheckSpellingFullText(string inputText)
         {
@@ -29,12 +24,11 @@ namespace Avalonia.SpellChecker
                 return results;
             }
 
-
             var words = SeparateWords(inputText);
 
             foreach (var word in words)
             {
-                if (!dictionaryManager.CheckWord(word.Value))
+                if (!dictionaryManager!.CheckWord(word.Value))
                 {
                     //var suggestions = _wordList.Suggest(word.Value);
                     results.Add(new SpellCheckEntry
@@ -93,5 +87,9 @@ namespace Avalonia.SpellChecker
             //nun       
         }
 
+        internal void AddCustomWord(string misspelledWord)
+        {
+            dictionaryManager!.AddCustomWord(misspelledWord);
+        }
     }
 }

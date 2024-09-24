@@ -174,9 +174,9 @@ public class SpellCheckerTextPresenter : TextPresenter
         return result;
     }
 
-    public IEnumerable<SpellCheckSuggestion>? GetSuggestionsAt(Point point)
+    public IEnumerable<SpellCheckSuggestion>? GetSuggestionsAt(Point point, out string? mispelledWord)
     {
-
+        mispelledWord = null;
         if (_spellCheckResults == null)
         {
             return null;
@@ -184,9 +184,23 @@ public class SpellCheckerTextPresenter : TextPresenter
 
         var result = TextLayout.HitTestPoint(point);
 
-        return _spellCheckResults
+        SpellCheckEntry? spellCheckEntry = _spellCheckResults
             .Where(x => x.Start <= result.TextPosition && (x.Start + x.Length) >= result.TextPosition)
-            .Select(x => _spellChecker.GetSuggestions(x.Word, x.Start, x.Length)).FirstOrDefault();
+            .FirstOrDefault();
+
+        if (spellCheckEntry is null)
+        {
+            return null;
+        }
+
+        mispelledWord = spellCheckEntry.Word;
+        return _spellChecker.GetSuggestions(spellCheckEntry.Word, spellCheckEntry.Start, spellCheckEntry.Length);
+    }
+
+    public void ForceInvalidateTextLayout()
+    {
+        this._overridesCacheKey = null;
+        this.InvalidateTextLayout();
     }
 
     protected override Size MeasureOverride(Size availableSize)

@@ -143,6 +143,13 @@ namespace Avalonia.SpellChecker
             return WordList.CreateFromFiles(dictionaryFile, affixFile);
         }
 
-
+        internal void AddCustomWord(string misspelledWord)
+        {
+            customDictionary.Add(misspelledWord, spellCheckerConfig.EnabledLanguages.FirstOrDefault());
+            foreach (var language in spellCheckerConfig.EnabledLanguages)
+            {
+                wordCheckCache.TryRemove((language, misspelledWord), out _);
+            }
+        }
     }
 }
