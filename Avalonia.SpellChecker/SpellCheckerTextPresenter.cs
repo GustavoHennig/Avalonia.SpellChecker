@@ -247,8 +247,8 @@ public class SpellCheckerTextPresenter : TextPresenter
         IReadOnlyList<ValueSpan<TextRunProperties>>? textStyleOverrides)
     {
         var foreground = Foreground;
-        var maxWidth = MathUtilities.IsZero(constraint.Width) ? double.PositiveInfinity : constraint.Width;
-        var maxHeight = MathUtilities.IsZero(constraint.Height) ? double.PositiveInfinity : constraint.Height;
+        var maxWidth = (constraint.Width == 0) ? double.PositiveInfinity : constraint.Width;
+        var maxHeight = (constraint.Height == 0) ? double.PositiveInfinity : constraint.Height;
 
         var textLayout = new TextLayout(text, typeface, fontFeatures: FontFeatures, fontSize: FontSize, foreground: foreground, textAlignment: TextAlignment,
             textWrapping: TextWrapping, maxWidth: maxWidth, maxHeight: maxHeight, textStyleOverrides: textStyleOverrides,
