@@ -61,8 +61,8 @@ public class SpellCheckerTextPresenter : TextPresenter
         // Create default TextRunProperties without any text decorations
         var defaultTextRunProperties = new GenericTextRunProperties(
             typeface,
-            FontFeatures,
-            FontSize,
+            fontFeatures: FontFeatures,
+            fontRenderingEmSize: FontSize,
             textDecorations: null, // No decorations by default
             foregroundBrush: foreground);
 
@@ -71,7 +71,9 @@ public class SpellCheckerTextPresenter : TextPresenter
         if (!string.IsNullOrEmpty(preeditText))
         {
             var preeditHighlight = new ValueSpan<TextRunProperties>(caretIndex, preeditText.Length,
-                    new GenericTextRunProperties(typeface, FontFeatures, FontSize,
+                    new GenericTextRunProperties(typeface,
+                    fontFeatures: FontFeatures,
+                    fontRenderingEmSize: FontSize,
                     foregroundBrush: foreground,
                     textDecorations: TextDecorations.Underline));
 
@@ -90,7 +92,9 @@ public class SpellCheckerTextPresenter : TextPresenter
                             start,
                             length,
                             new GenericTextRunProperties(
-                                typeface, FontFeatures, FontSize,
+                                typeface,
+                                fontFeatures: FontFeatures,
+                                fontRenderingEmSize: FontSize,
                                 foregroundBrush: SelectionForegroundBrush))
                 };
             }
@@ -114,8 +118,8 @@ public class SpellCheckerTextPresenter : TextPresenter
 
                 var underlineProp = new GenericTextRunProperties(
                                         typeface,
-                                        FontFeatures,
-                                        FontSize,
+                                        fontFeatures: FontFeatures,
+                                        fontRenderingEmSize: FontSize,
                                         textDecorations: misspellesWordTextDecorations,
                                         foregroundBrush: foreground);
 
@@ -246,8 +250,8 @@ public class SpellCheckerTextPresenter : TextPresenter
         var maxWidth = MathUtilities.IsZero(constraint.Width) ? double.PositiveInfinity : constraint.Width;
         var maxHeight = MathUtilities.IsZero(constraint.Height) ? double.PositiveInfinity : constraint.Height;
 
-        var textLayout = new TextLayout(text, typeface, FontFeatures, FontSize, foreground, TextAlignment,
-            TextWrapping, maxWidth: maxWidth, maxHeight: maxHeight, textStyleOverrides: textStyleOverrides,
+        var textLayout = new TextLayout(text, typeface, fontFeatures: FontFeatures, fontSize: FontSize, foreground: foreground, textAlignment: TextAlignment,
+            textWrapping: TextWrapping, maxWidth: maxWidth, maxHeight: maxHeight, textStyleOverrides: textStyleOverrides,
             flowDirection: FlowDirection, lineHeight: LineHeight, letterSpacing: LetterSpacing);
 
         return textLayout;
