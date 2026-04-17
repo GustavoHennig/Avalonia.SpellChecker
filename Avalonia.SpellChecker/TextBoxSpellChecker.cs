@@ -8,6 +8,12 @@ using Avalonia.VisualTree;
 using System.ComponentModel.Design;
 using System.Windows.Input;
 
+#if AVALONIA_11
+    using ContextRequestedEventArgs = Avalonia.Controls.ContextRequestedEventArgs;
+#elif AVALONIA_12
+    using ContextRequestedEventArgs = Avalonia.Input.ContextRequestedEventArgs;
+#endif
+
 namespace Avalonia.SpellChecker
 {
     /// <summary>
