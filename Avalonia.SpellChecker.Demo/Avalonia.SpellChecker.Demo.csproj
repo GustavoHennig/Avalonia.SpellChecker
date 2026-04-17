@@ -1,20 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <!-- Default to latest version -->
+    <AvaloniaVersion Condition="'$(AvaloniaVersion)' == ''">12</AvaloniaVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.3" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.3" />
+  <PropertyGroup Condition="'$(AvaloniaVersion)' == '11'">
+    <TargetFramework>net8.0</TargetFramework>
+    <DefineConstants>AVALONIA_11</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(AvaloniaVersion)' == '12'">
+    <TargetFramework>net10.0</TargetFramework>
+    <DefineConstants>AVALONIA_12</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(AvaloniaVersion)' == '11'">
+    <PackageReference Include="Avalonia" Version="11.*" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.*" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.*" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.*" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.3" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.*" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(AvaloniaVersion)' == '12'">
+    <PackageReference Include="Avalonia" Version="12.*" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.*" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.*" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.*" />
+    <!--Condition below is needed to remove Avalonia.DiagnosticsSupport package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.*" />
   </ItemGroup>
 
   <ItemGroup>
